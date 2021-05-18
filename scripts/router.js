@@ -5,7 +5,7 @@ export const router = {};
 /**
  * Changes the "page" (state) that your SPA app is currently set to
  */
-router.setState = function() {
+router.setState = function(state, json) {
   /**
    * - There are three states that your SPA app will have
    *    1. The home page
@@ -35,4 +35,40 @@ router.setState = function() {
    *    1. You may add as many helper functions in this file as you like
    *    2. You may modify the parameters of setState() as much as you like
    */
+
+document.body.classList.remove('single-entry');
+document.body.classList.remove('settings');
+
+ switch(state){
+  case 'home':
+    document.getElementsByTagName('h1')[0].innerHTML = "Journal Entries";
+    history.pushState({title: 'home'}, '', './');
+    break;
+  case 'entry':
+    history.pushState({title: 'entry', json: json}, '', './#entry'+ json.number);
+    document.getElementsByTagName('h1')[0].innerHTML = "Entry " + json.number;
+    let entryView = document.createElement('entry-page');
+    entryView.entry = json;
+    document.querySelector("entry-page").remove();
+    document.body.appendChild(entryView);
+    document.body.classList.add('single-entry');
+    break;
+  case 'settings':
+    document.getElementsByTagName('h1')[0].innerHTML = "Settings";
+    history.pushState({title: 'settings'}, '', './#settings');
+    document.body.classList.add("settings");
+    break;
+  default:
+    console.log("something is very wrong");
+ }
+
+  
+  
+
+  // const settingsIcon = document.querySelector('settings.svg');
+  // settingsIcon.addEventListener('click',event=>{
+  //   history.pushState({title: 'settings'}, '', './#settings');
+  // });
+
+
 }

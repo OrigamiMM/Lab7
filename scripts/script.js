@@ -14,5 +14,41 @@ document.addEventListener('DOMContentLoaded', () => {
         newPost.entry = entry;
         document.querySelector('main').appendChild(newPost);
       });
-    });
+    }).then(()=>{
+
+      let entries = document.getElementsByTagName('journal-entry');
+      let index = 1;
+      Array.from(entries).forEach(journalEntryElement => {
+        
+        const jsonVersion = journalEntryElement.entry;
+        jsonVersion["number"] = index++;
+
+        journalEntryElement.addEventListener('click',event=>{
+          setState('entry', jsonVersion);
+        });
+      });
+
+      let settingsIcon = document.getElementsByTagName('img');
+      settingsIcon[0].addEventListener('click', e=>{
+        setState('settings', null);
+      });
+
+      let header = document.getElementsByTagName('h1');
+      header[0].addEventListener('click',e=>{
+        setState('home', null);
+      });
+
+      window.addEventListener('popstate', e=>{
+        if(e.state){
+          if(e.state.json){
+            history.replaceState(e.state.title, e.state.json);
+          }else{
+            history.replaceState(e.state.title, null);
+          }
+        }else{
+          history.back();
+        }
+      });
+    });  
 });
+
